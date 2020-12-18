@@ -226,6 +226,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
 /// Shows a modal material design bottom sheet.
 Future<T> showCustomModalBottomSheet<T>({
   @required BuildContext context,
+  double closeProgressThreshold,
   @required WidgetBuilder builder,
   @required WidgetWithChildBuilder containerWidget,
   Color backgroundColor,
@@ -261,6 +262,7 @@ Future<T> showCustomModalBottomSheet<T>({
   final result = await Navigator.of(context, rootNavigator: useRootNavigator)
       .push(ModalBottomSheetRoute<T>(
     builder: builder,
+     closeProgressThreshold: closeProgressThreshold,
     bounce: bounce,
     containerBuilder: containerWidget,
     secondAnimationController: secondAnimation,
