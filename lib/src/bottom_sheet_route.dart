@@ -77,8 +77,7 @@ class _ModalBottomSheetState<T> extends State<_ModalBottomSheet<T>> {
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
-    final scrollController = PrimaryScrollController.of(context) ??
-        (_scrollController ??= ScrollController());
+    final scrollController = PrimaryScrollController.of(context) ?? (_scrollController ??= ScrollController());
     return ModalScrollController(
       controller: scrollController,
       child: Builder(
@@ -186,8 +185,7 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   bool get _hasScopedWillPopCallback => hasScopedWillPopCallback;
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     // By definition, the bottom sheet is aligned to the bottom of the page
     // and isn't exposed to the top padding of the MediaQuery.
     Widget bottomSheet = MediaQuery.removePadding(
@@ -207,12 +205,10 @@ class ModalBottomSheetRoute<T> extends PopupRoute<T> {
   }
 
   @override
-  bool canTransitionTo(TransitionRoute<dynamic> nextRoute) =>
-      nextRoute is ModalBottomSheetRoute;
+  bool canTransitionTo(TransitionRoute<dynamic> nextRoute) => nextRoute is ModalBottomSheetRoute;
 
   @override
-  bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) =>
-      previousRoute is ModalBottomSheetRoute || previousRoute is PageRoute;
+  bool canTransitionFrom(TransitionRoute<dynamic> previousRoute) => previousRoute is ModalBottomSheetRoute || previousRoute is PageRoute;
 
   Widget getPreviousRouteTransition(
     BuildContext context,
@@ -242,6 +238,7 @@ Future<T> showCustomModalBottomSheet<T>({
   bool isDismissible = true,
   bool enableDrag = true,
   Duration duration,
+  RouteSettings routeSettings,
 }) async {
   assert(context != null);
   assert(builder != null);
@@ -252,17 +249,12 @@ Future<T> showCustomModalBottomSheet<T>({
   assert(enableDrag != null);
   assert(debugCheckHasMediaQuery(context));
   assert(debugCheckHasMaterialLocalizations(context));
-  final hasMaterialLocalizations =
-      Localizations.of<MaterialLocalizations>(context, MaterialLocalizations) !=
-          null;
-  final barrierLabel = hasMaterialLocalizations
-      ? MaterialLocalizations.of(context).modalBarrierDismissLabel
-      : '';
+  final hasMaterialLocalizations = Localizations.of<MaterialLocalizations>(context, MaterialLocalizations) != null;
+  final barrierLabel = hasMaterialLocalizations ? MaterialLocalizations.of(context).modalBarrierDismissLabel : '';
 
-  final result = await Navigator.of(context, rootNavigator: useRootNavigator)
-      .push(ModalBottomSheetRoute<T>(
+  final result = await Navigator.of(context, rootNavigator: useRootNavigator).push(ModalBottomSheetRoute<T>(
     builder: builder,
-     closeProgressThreshold: closeProgressThreshold,
+    closeProgressThreshold: closeProgressThreshold,
     bounce: bounce,
     containerBuilder: containerWidget,
     secondAnimationController: secondAnimation,
@@ -273,6 +265,7 @@ Future<T> showCustomModalBottomSheet<T>({
     enableDrag: enableDrag,
     animationCurve: animationCurve,
     duration: duration,
+    settings: routeSettings,
   ));
   return result;
 }
